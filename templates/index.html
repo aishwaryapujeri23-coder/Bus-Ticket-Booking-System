@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block title %}BusWay Pro — Book Bus Tickets Online{% endblock %}
+{% block content %}
+<div class="page-wrapper">
+
+  <!-- Hero -->
+  <div class="hero fade-in">
+    <div class="hero-tag">🇮🇳 India's Smart Bus Network</div>
+    <h1>Travel <span>Smarter</span><br>Book <span>Faster</span></h1>
+    <p>Search thousands of routes, compare buses, and book your next journey in seconds.</p>
+
+    <!-- Search -->
+    <div class="search-card" style="max-width:780px;margin:0 auto;">
+      <h3>🔍 Find Your Bus</h3>
+      <form method="POST" action="/search">
+        <div class="search-grid">
+          <div class="form-group">
+            <label class="form-label">From</label>
+            <input type="text" name="source" class="form-control-pro" placeholder="e.g. Mumbai" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">To</label>
+            <input type="text" name="destination" class="form-control-pro" placeholder="e.g. Pune" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Date</label>
+            <input type="date" name="travel_date" class="form-control-pro">
+          </div>
+          <button type="submit" class="btn-pro btn-pro-primary btn-pro-lg" style="padding:12px 28px;">
+            Search →
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Features -->
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:2rem;" class="fade-in stagger-2">
+    <div class="card-pro" style="text-align:center;padding:2rem 1.5rem;">
+      <div style="font-size:2.5rem;margin-bottom:1rem;">⚡</div>
+      <h4 style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:.5rem;">Instant Booking</h4>
+      <p style="color:var(--text-muted);font-size:.9rem;">Confirm your seat in under 60 seconds with our streamlined checkout.</p>
+    </div>
+    <div class="card-pro" style="text-align:center;padding:2rem 1.5rem;">
+      <div style="font-size:2.5rem;margin-bottom:1rem;">🗺️</div>
+      <h4 style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:.5rem;">500+ Routes</h4>
+      <p style="color:var(--text-muted);font-size:.9rem;">Pan-India coverage across major cities, towns, and destinations.</p>
+    </div>
+    <div class="card-pro" style="text-align:center;padding:2rem 1.5rem;">
+      <div style="font-size:2.5rem;margin-bottom:1rem;">🎟️</div>
+      <h4 style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:.5rem;">E-Ticket PDF</h4>
+      <p style="color:var(--text-muted);font-size:.9rem;">Download and print your ticket anytime from My Bookings.</p>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

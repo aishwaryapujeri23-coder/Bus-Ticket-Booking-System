@@ -1,0 +1,226 @@
+{% extends 'base.html' %}
+{% block title %}Payment — BusWay Pro{% endblock %}
+{% block content %}
+<div class="page-wrapper" style="max-width:900px;">
+  <div class="page-header">
+    <div>
+      <div class="page-title">Complete Payment</div>
+      <div class="page-subtitle">Secure checkout · 100% safe & encrypted</div>
+    </div>
+    <a href="javascript:history.back()" class="btn-pro btn-pro-ghost">← Back</a>
+  </div>
+
+  <!-- Progress Steps -->
+  <div style="display:flex;align-items:center;gap:8px;margin-bottom:2rem;">
+    <div style="display:flex;align-items:center;gap:6px;font-size:.85rem;color:var(--text-muted);">
+      <span style="width:22px;height:22px;background:var(--success);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:.7rem;color:#0a2a1e;">✓</span>
+      Select Seat
+    </div>
+    <div style="flex:1;height:2px;background:var(--primary);border-radius:2px;"></div>
+    <div style="display:flex;align-items:center;gap:6px;font-size:.85rem;color:var(--primary);font-weight:600;">
+      <span style="width:22px;height:22px;background:var(--primary);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:.7rem;color:white;">2</span>
+      Payment
+    </div>
+    <div style="flex:1;height:2px;background:var(--border);border-radius:2px;"></div>
+    <div style="display:flex;align-items:center;gap:6px;font-size:.85rem;color:var(--text-muted);">
+      <span style="width:22px;height:22px;background:var(--surface-4);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:.7rem;">3</span>
+      Confirm
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 320px;gap:1.5rem;align-items:start;">
+
+    <!-- Payment Methods -->
+    <div>
+      <form method="POST" id="paymentForm">
+
+        <div class="card-pro" style="margin-bottom:1rem;">
+          <h4 style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:1.2rem;">Choose Payment Method</h4>
+
+          <div id="methodCards" style="display:flex;flex-direction:column;gap:10px;margin-bottom:1.5rem;">
+
+            <!-- UPI -->
+            <label class="payment-method-card selected" id="m-upi">
+              <input type="radio" name="payment_method" value="upi" checked style="display:none;" onchange="selectMethod('upi')">
+              <div class="payment-icon">📱</div>
+              <div>
+                <div style="font-weight:600;">UPI</div>
+                <div style="font-size:.82rem;color:var(--text-muted);">GPay, PhonePe, Paytm, BHIM</div>
+              </div>
+              <span class="badge-pro badge-success" style="margin-left:auto;">Instant</span>
+            </label>
+
+            <!-- Credit / Debit Card -->
+            <label class="payment-method-card" id="m-card">
+              <input type="radio" name="payment_method" value="card" style="display:none;" onchange="selectMethod('card')">
+              <div class="payment-icon">💳</div>
+              <div>
+                <div style="font-weight:600;">Credit / Debit Card</div>
+                <div style="font-size:.82rem;color:var(--text-muted);">Visa, Mastercard, RuPay</div>
+              </div>
+            </label>
+
+            <!-- Net Banking -->
+            <label class="payment-method-card" id="m-netbank">
+              <input type="radio" name="payment_method" value="netbanking" style="display:none;" onchange="selectMethod('netbank')">
+              <div class="payment-icon">🏦</div>
+              <div>
+                <div style="font-weight:600;">Net Banking</div>
+                <div style="font-size:.82rem;color:var(--text-muted);">SBI, HDFC, ICICI, Axis & more</div>
+              </div>
+            </label>
+
+            <!-- Wallet -->
+            <label class="payment-method-card" id="m-wallet">
+              <input type="radio" name="payment_method" value="wallet" style="display:none;" onchange="selectMethod('wallet')">
+              <div class="payment-icon">👜</div>
+              <div>
+                <div style="font-weight:600;">Wallet</div>
+                <div style="font-size:.82rem;color:var(--text-muted);">Paytm Wallet, Amazon Pay</div>
+              </div>
+            </label>
+          </div>
+
+          <!-- UPI Panel -->
+          <div id="panel-upi">
+            <div class="form-group">
+              <label class="form-label">UPI ID</label>
+              <input type="text" class="form-control-pro" placeholder="yourname@upi" style="margin-bottom:8px;">
+            </div>
+            <p style="font-size:.8rem;color:var(--text-muted);">⚡ Payment will be processed via your UPI app</p>
+          </div>
+
+          <!-- Card Panel -->
+          <div id="panel-card" style="display:none;">
+            <div class="form-group" style="margin-bottom:.8rem;">
+              <label class="form-label">Card Number</label>
+              <input type="text" class="form-control-pro" placeholder="4242 4242 4242 4242" maxlength="19">
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-bottom:.8rem;">
+              <div class="form-group">
+                <label class="form-label">Expiry</label>
+                <input type="text" class="form-control-pro" placeholder="MM / YY">
+              </div>
+              <div class="form-group">
+                <label class="form-label">CVV</label>
+                <input type="text" class="form-control-pro" placeholder="•••">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Name on Card</label>
+              <input type="text" class="form-control-pro" placeholder="ARJUN SHARMA">
+            </div>
+          </div>
+
+          <!-- Net Banking Panel -->
+          <div id="panel-netbank" style="display:none;">
+            <div class="form-group">
+              <label class="form-label">Select Bank</label>
+              <select class="form-select-pro">
+                <option>State Bank of India</option>
+                <option>HDFC Bank</option>
+                <option>ICICI Bank</option>
+                <option>Axis Bank</option>
+                <option>Kotak Mahindra Bank</option>
+                <option>Other</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Wallet Panel -->
+          <div id="panel-wallet" style="display:none;">
+            <div class="form-group">
+              <label class="form-label">Select Wallet</label>
+              <select class="form-select-pro">
+                <option>Paytm Wallet</option>
+                <option>Amazon Pay</option>
+                <option>Mobikwik</option>
+                <option>Freecharge</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pay Button -->
+        <button type="button" onclick="processPayment()" class="btn-pro btn-pro-primary btn-pro-full btn-pro-lg" id="payBtn">
+          🔒 Pay ₹{{ fare }} Securely
+        </button>
+
+        <!-- Hidden submit trigger -->
+        <input type="hidden" name="_trigger" value="pay">
+      </form>
+    </div>
+
+    <!-- Order Summary -->
+    <div>
+      <div class="card-pro" style="position:sticky;top:88px;">
+        <h4 style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:1.2rem;">🧾 Order Summary</h4>
+        <div class="ticket-details">
+          <div class="ticket-row">
+            <span class="ticket-row-label">Bus</span>
+            <span class="ticket-row-value">{{ pending.bus_name }}</span>
+          </div>
+          <div class="ticket-row">
+            <span class="ticket-row-label">Route</span>
+            <span class="ticket-row-value">{{ pending.source }} → {{ pending.destination }}</span>
+          </div>
+          <div class="ticket-row">
+            <span class="ticket-row-label">Departure</span>
+            <span class="ticket-row-value">{{ pending.departure_time }}</span>
+          </div>
+          <div class="ticket-row">
+            <span class="ticket-row-label">Seat No.</span>
+            <span class="ticket-row-value" style="color:var(--primary);">{{ pending.seat_number }}</span>
+          </div>
+          <div class="ticket-row">
+            <span class="ticket-row-label">Base Fare</span>
+            <span class="ticket-row-value">₹{{ fare }}</span>
+          </div>
+          <div class="ticket-row">
+            <span class="ticket-row-label">Convenience Fee</span>
+            <span class="ticket-row-value">₹0</span>
+          </div>
+        </div>
+
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border);">
+          <span style="font-family:'Syne',sans-serif;font-weight:700;">Total</span>
+          <span style="font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;color:var(--primary);">₹{{ fare }}</span>
+        </div>
+
+        <div style="margin-top:1rem;padding:12px;background:rgba(6,214,160,.06);border:1px solid rgba(6,214,160,.15);border-radius:8px;font-size:.83rem;color:var(--success);">
+          🔐 256-bit SSL encrypted · PCI DSS compliant
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function selectMethod(method) {
+  // Reset all cards
+  ['upi','card','netbank','wallet'].forEach(m => {
+    const card = document.getElementById('m-' + m);
+    if(card) card.classList.remove('selected');
+    const panel = document.getElementById('panel-' + m);
+    if(panel) panel.style.display = 'none';
+  });
+  document.getElementById('m-' + method).classList.add('selected');
+  document.getElementById('panel-' + method).style.display = 'block';
+
+  // Update radio
+  const map = {upi:'upi', card:'card', netbank:'netbanking', wallet:'wallet'};
+  document.querySelector(`input[value="${map[method]}"]`).checked = true;
+}
+
+function processPayment() {
+  const btn = document.getElementById('payBtn');
+  btn.disabled = true;
+  btn.textContent = '⏳ Processing...';
+  btn.style.opacity = '.7';
+  // Simulate 1.5s payment processing then submit
+  setTimeout(() => {
+    document.getElementById('paymentForm').submit();
+  }, 1500);
+}
+</script>
+{% endblock %}

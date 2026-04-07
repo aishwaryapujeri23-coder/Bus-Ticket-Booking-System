@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block title %}Search Results — BusWay Pro{% endblock %}
+{% block content %}
+<div class="page-wrapper">
+  <div class="page-header">
+    <div>
+      <div class="page-title">Search Results</div>
+      <div class="page-subtitle">
+        {% if buses %}
+          {{ buses|length }} bus{{ 'es' if buses|length != 1 }} found
+          {% if source and destination %}
+            · <strong>{{ source }}</strong> → <strong>{{ destination }}</strong>
+          {% endif %}
+          {% if travel_date %}· {{ travel_date }}{% endif %}
+        {% else %}
+          No buses found for your route
+        {% endif %}
+      </div>
+    </div>
+    <a href="/" class="btn-pro btn-pro-ghost">← Back to Search</a>
+  </div>
+
+  {% if buses %}
+    {% for bus in buses %}
+    {% set available = bus.seats - bus.passengers_booked %}
+    <div class="bus-card fade-in stagger-{{ loop.index if loop.index <= 4 else 4 }}">
+      <div>
+        <div class="route-arrow">
+          <span>{{ bus.source }}</span>
+          <span style="color:var(--primary);font-size:1.2rem;">→</span>
+          <span>{{ bus.destination }}</span>
+        </div>
+        <div class="bus-name">🚌 {{ bus.bus_name }}</div>
+        <div class="bus-meta">
+          <div class="bus-meta-item">🕐 Departs {{ bus.departure_time }}</div>
+          <div class="bus-meta-item">💺 {{ bus.seats }} seats total</div>
+          <div class="bus-meta-item">
+            {% if available > 5 %}
+              <span class="badge-pro badge-success">● {{ available }} available</span>
+            {% elif available > 0 %}
+              <span class="badge-pro badge-warning">⚠️ {{ available }} left</span>
+            {% else %}
+              <span class="badge-pro badge-danger">✗ Sold out</span>
+            {% endif %}
+          </div>
+          {% if bus.distance %}
+          <div class="bus-meta-item">📍 {{ bus.distance }} km</div>
+          {% endif %}
+        </div>
+      </div>
+      <div style="text-align:right;min-width:160px;">
+        {% if bus.distance %}
+        <div style="font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;color:var(--primary);">
+          ₹{{ [150, (bus.distance * 2.5)|int]|max }}
+        </div>
+        <div style="font-size:.8rem;color:var(--text-muted);margin-bottom:.8rem;">per person</div>
+        {% endif %}
+        {% if available > 0 %}
+          <a href="/book/{{ bus.bus_id }}" class="btn-pro btn-pro-primary">Book Now →</a>
+        {% else %}
+          <button class="btn-pro btn-pro-ghost" disabled style="cursor:not-allowed;opacity:.5;">Sold Out</button>
+        {% endif %}
+      </div>
+    </div>
+    {% endfor %}
+  {% else %}
+    <div class="empty-state">
+      <div class="empty-state-icon">🔍</div>
+      <h4>No buses found</h4>
+      <p>Try a different route or date</p>
+      <a href="/" class="btn-pro btn-pro-primary" style="margin-top:1rem;">Try Again</a>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

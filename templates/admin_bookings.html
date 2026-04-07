@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+{% block title %}All Bookings — BusWay Pro Admin{% endblock %}
+{% block content %}
+<div class="admin-layout">
+  <aside class="admin-sidebar">
+    <div style="margin-bottom:.5rem;">
+      <div class="sidebar-section-label">Overview</div>
+      <a href="/admin" class="sidebar-link">📊 Dashboard</a>
+    </div>
+    <div>
+      <div class="sidebar-section-label">Manage</div>
+      <a href="/admin/routes" class="sidebar-link">🗺️ Routes</a>
+      <a href="/admin/bookings" class="sidebar-link active">🎟️ All Bookings</a>
+    </div>
+    <div>
+      <div class="sidebar-section-label">Account</div>
+      <a href="/logout" class="sidebar-link">🚪 Logout</a>
+    </div>
+  </aside>
+
+  <main class="admin-content">
+    <div class="page-header">
+      <div>
+        <div class="page-title">All Bookings</div>
+        <div class="page-subtitle">Complete booking history across all users</div>
+      </div>
+      <span class="badge-pro badge-orange" style="padding:8px 16px;font-size:.85rem;">{{ bookings|length }} total</span>
+    </div>
+
+    <!-- Search / Filter bar -->
+    <div class="card-pro fade-in" style="margin-bottom:1.5rem;padding:1rem 1.2rem;">
+      <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+        <input type="text" id="searchInput" class="form-control-pro" placeholder="🔍 Search by name, bus, or route…" style="max-width:320px;" oninput="filterTable()">
+        <select id="routeFilter" class="form-select-pro" style="max-width:220px;" onchange="filterTable()">
+          <option value="">All Routes</option>
+          {% set routes_seen = [] %}
+          {% for b in bookings %}
+            {% set route = b.source + ' → ' + b.destination %}
+            {% if route not in routes_seen %}
+              {% set _ = routes_seen.append(route) %}
+              <option>{{ route }}</option>
+            {% endif %}
+          {% endfor %}
+        </select>
+        <button onclick="clearFilters()" class="btn-pro btn-pro-ghost btn-pro-sm">Clear</button>
+        <span id="filterCount" style="font-size:.85rem;color:var(--text-muted);margin-left:auto;"></span>
+      </div>
+    </div>
+
+    {% if bookings %}
+    <div class="table-container fade-in">
+      <div class="table-header">
+        <h3>🎟️ Booking Records</h3>
+      </div>
+      <table class="table-pro" id="bookingsTable">
+        <thead>
+          <tr>
+            <th>Booking ID</th>
+            <th>Passenger</th>
+            <th>Bus</th>
+            <th>Route</th>
+            <th>Departure</th>
+            <th>Seat</th>
+            <th>Booked On</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody">
+          {% for b in bookings %}
+          <tr>
+            <td><span style="color:var(--text-muted);font-size:.85rem;">#{{ b.booking_id }}</span></td>
+            <td>
+              <div style="font-weight:600;">{{ b.user_name }}</div>
+            </td>
+            <td>{{ b.bus_name }}</td>
+            <td>
+              <span style="color:var(--text-muted);">{{ b.source }}</span>
+              <span style="color:var(--primary);margin:0 4px;">→</span>
+              <span style="color:var(--text-muted);">{{ b.destination }}</span>
+            </td>
+            <td>{{ b.departure_time }}</td>
+            <td><span class="badge-pro badge-orange">{{ b.seat_number }}</span></td>
+            <td style="font-size:.83rem;color:var(--text-muted);">{{ b.booking_date }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+      <div class="empty-state-icon">🎟️</div>
+      <h4>No bookings yet</h4>
+      <p>Bookings will appear here once users start booking trips</p>
+    </div>
+    {% endif %}
+  </main>
+</div>
+
+<script>
+function filterTable() {
+  const search = document.getElementById('searchInput').value.toLowerCase();
+  const route  = document.getElementById('routeFilter').value.toLowerCase();
+  const rows   = document.querySelectorAll('#tableBody tr');
+  let visible  = 0;
+  rows.forEach(row => {
+    const text = row.textContent.toLowerCase();
+    const matchSearch = !search || text.includes(search);
+    const matchRoute  = !route  || text.includes(route);
+    row.style.display = matchSearch && matchRoute ? '' : 'none';
+    if (matchSearch && matchRoute) visible++;
+  });
+  document.getElementById('filterCount').textContent =
+    visible < rows.length ? `Showing ${visible} of ${rows.length}` : '';
+}
+function clearFilters() {
+  document.getElementById('searchInput').value = '';
+  document.getElementById('routeFilter').value = '';
+  filterTable();
+}
+</script>
+{% endblock %}

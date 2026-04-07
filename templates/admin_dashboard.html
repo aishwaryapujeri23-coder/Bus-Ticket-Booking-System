@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+{% block title %}Admin Dashboard — BusWay Pro{% endblock %}
+{% block content %}
+<div class="admin-layout">
+
+  <!-- Sidebar -->
+  <aside class="admin-sidebar">
+    <div style="margin-bottom:.5rem;">
+      <div class="sidebar-section-label">Overview</div>
+      <a href="/admin" class="sidebar-link active">📊 Dashboard</a>
+    </div>
+    <div>
+      <div class="sidebar-section-label">Manage</div>
+      <a href="/admin/routes" class="sidebar-link">🗺️ Routes</a>
+      <a href="/admin/bookings" class="sidebar-link">🎟️ All Bookings</a>
+    </div>
+    <div>
+      <div class="sidebar-section-label">Account</div>
+      <a href="/logout" class="sidebar-link">🚪 Logout</a>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="admin-content">
+
+    <div class="page-header">
+      <div>
+        <div class="page-title">Admin Dashboard</div>
+        <div class="page-subtitle">Welcome back, {{ session.user_name }} 👋</div>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-grid">
+      <div class="stat-card orange fade-in">
+        <div class="stat-icon orange">🚌</div>
+        <div class="stat-value">{{ total_buses }}</div>
+        <div class="stat-label">Total Buses</div>
+      </div>
+      <div class="stat-card green fade-in stagger-1">
+        <div class="stat-icon green">🎟️</div>
+        <div class="stat-value">{{ total_bookings }}</div>
+        <div class="stat-label">Total Bookings</div>
+      </div>
+      <div class="stat-card blue fade-in stagger-2">
+        <div class="stat-icon blue">👥</div>
+        <div class="stat-value">{{ total_users }}</div>
+        <div class="stat-label">Registered Users</div>
+      </div>
+      <div class="stat-card yellow fade-in stagger-3">
+        <div class="stat-icon yellow">🗺️</div>
+        <div class="stat-value">{{ total_routes }}</div>
+        <div class="stat-label">Active Routes</div>
+      </div>
+    </div>
+
+    <!-- Add Bus Form -->
+    <div class="card-pro fade-in" style="margin-bottom:1.5rem;">
+      <div class="section-header">
+        <div class="section-icon">➕</div>
+        <div>
+          <div style="font-family:'Syne',sans-serif;font-weight:700;">Add New Bus</div>
+          <div style="font-size:.83rem;color:var(--text-muted);">Register a new bus to a route</div>
+        </div>
+      </div>
+      <form method="POST">
+        <div style="display:grid;grid-template-columns:2fr 2fr 1fr 1fr auto;gap:12px;align-items:end;">
+          <div class="form-group">
+            <label class="form-label">Bus Name</label>
+            <input type="text" name="bus_name" class="form-control-pro" placeholder="e.g. Rajdhani Express" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Route</label>
+            <select name="route_id" class="form-select-pro" required>
+              <option value="">Select Route</option>
+              {% for r in routes %}
+              <option value="{{ r.route_id }}">{{ r.source }} → {{ r.destination }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Departure</label>
+            <input type="time" name="departure_time" class="form-control-pro" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Seats</label>
+            <input type="number" name="seats" class="form-control-pro" placeholder="40" min="1" required>
+          </div>
+          <button type="submit" class="btn-pro btn-pro-primary" style="padding:12px 20px;">Add Bus</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Buses Table -->
+    <div class="table-container fade-in">
+      <div class="table-header">
+        <h3>🚌 All Buses</h3>
+        <span class="badge-pro badge-orange">{{ buses|length }} buses</span>
+      </div>
+      <table class="table-pro">
+        <thead>
+          <tr>
+            <th>Bus Name</th>
+            <th>Route</th>
+            <th>Departure</th>
+            <th>Capacity</th>
+            <th>Booked</th>
+            <th>Occupancy</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for bus in buses %}
+          {% set pct = ((bus.passengers_booked / bus.seats) * 100)|int if bus.seats > 0 else 0 %}
+          <tr>
+            <td><strong>{{ bus.bus_name }}</strong></td>
+            <td>
+              <span style="color:var(--text-muted);">{{ bus.source }}</span>
+              <span style="color:var(--primary);margin:0 4px;">→</span>
+              <span style="color:var(--text-muted);">{{ bus.destination }}</span>
+            </td>
+            <td>{{ bus.departure_time }}</td>
+            <td>{{ bus.seats }}</td>
+            <td>
+              <span class="badge-pro {% if pct >= 90 %}badge-danger{% elif pct >= 60 %}badge-warning{% else %}badge-success{% endif %}">
+                {{ bus.passengers_booked }}
+              </span>
+            </td>
+            <td style="min-width:120px;">
+              <div style="display:flex;align-items:center;gap:8px;">
+                <div class="progress-bar-wrapper" style="flex:1;">
+                  <div class="progress-bar-fill" style="width:{{ pct }}%;background:{% if pct >= 90 %}var(--danger){% elif pct >= 60 %}var(--warning){% else %}var(--success){% endif %};"></div>
+                </div>
+                <span style="font-size:.8rem;color:var(--text-muted);min-width:32px;">{{ pct }}%</span>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+  </main>
+</div>
+{% endblock %}

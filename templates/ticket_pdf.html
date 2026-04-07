@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Ticket — {{ pnr }}</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap');
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'DM Sans',sans-serif; background:#f4f6f9; padding:30px; color:#111; }
+    .ticket {
+      max-width: 680px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 30px rgba(0,0,0,0.12);
+    }
+    .ticket-header {
+      background: linear-gradient(135deg, #FF6B2B 0%, #e05520 100%);
+      color: white;
+      padding: 28px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .brand { font-family:'Syne',sans-serif; font-size:1.4rem; font-weight:800; }
+    .brand span { opacity:.75; }
+    .pnr-block { text-align:right; }
+    .pnr-label { font-size:.72rem; opacity:.8; text-transform:uppercase; letter-spacing:.5px; }
+    .pnr-value { font-family:'Syne',sans-serif; font-size:1.3rem; font-weight:800; letter-spacing:2px; }
+
+    .ticket-body { padding:28px 32px; }
+
+    .route-banner {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      background: #f8f9fb;
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-bottom: 24px;
+    }
+    .city { text-align:center; flex:1; }
+    .city-name { font-family:'Syne',sans-serif; font-size:1.5rem; font-weight:800; color:#111; }
+    .city-label { font-size:.78rem; color:#888; text-transform:uppercase; letter-spacing:.5px; margin-top:2px; }
+    .route-arrow {
+      font-size:2rem;
+      color:#FF6B2B;
+      font-weight:700;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .info-item {
+      background: #f8f9fb;
+      border-radius: 10px;
+      padding: 14px 16px;
+    }
+    .info-label { font-size:.73rem; color:#888; font-weight:600; text-transform:uppercase; letter-spacing:.4px; margin-bottom:4px; }
+    .info-value { font-size:1rem; font-weight:600; color:#111; }
+    .info-value.highlight { color:#FF6B2B; }
+
+    .passenger-block {
+      border-top:1px solid #eee;
+      padding-top:20px;
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-end;
+    }
+    .pax-name-label { font-size:.73rem; color:#888; font-weight:600; text-transform:uppercase; margin-bottom:4px; }
+    .pax-name { font-family:'Syne',sans-serif; font-size:1.2rem; font-weight:700; }
+
+    .fare-block { text-align:right; }
+    .fare-label { font-size:.73rem; color:#888; font-weight:600; text-transform:uppercase; }
+    .fare-value { font-family:'Syne',sans-serif; font-size:1.6rem; font-weight:800; color:#06D6A0; }
+
+    .ticket-footer {
+      background:#f8f9fb;
+      border-top:1px solid #eee;
+      padding:16px 32px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      font-size:.8rem;
+      color:#888;
+    }
+
+    .barcode {
+      display:flex;
+      gap:2px;
+      align-items:flex-end;
+    }
+    .bar { width:3px; background:#333; border-radius:1px; }
+
+    @media print {
+      body { padding:0; background:white; }
+      .ticket { box-shadow:none; border-radius:0; }
+      .no-print { display:none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="no-print" style="text-align:center;margin-bottom:20px;">
+  <button onclick="window.print()" style="background:#FF6B2B;color:white;border:none;padding:12px 32px;border-radius:8px;font-size:1rem;font-weight:600;cursor:pointer;margin-right:10px;">🖨️ Print Ticket</button>
+  <button onclick="window.close()" style="background:#eee;color:#333;border:none;padding:12px 24px;border-radius:8px;font-size:1rem;cursor:pointer;">Close</button>
+</div>
+
+<div class="ticket">
+  <div class="ticket-header">
+    <div class="brand">🚌 Bus<span>Way</span> Pro</div>
+    <div class="pnr-block">
+      <div class="pnr-label">PNR Number</div>
+      <div class="pnr-value">{{ pnr }}</div>
+    </div>
+  </div>
+
+  <div class="ticket-body">
+    <div class="route-banner">
+      <div class="city">
+        <div class="city-name">{{ booking.source }}</div>
+        <div class="city-label">Origin</div>
+      </div>
+      <div class="route-arrow">→</div>
+      <div class="city">
+        <div class="city-name">{{ booking.destination }}</div>
+        <div class="city-label">Destination</div>
+      </div>
+    </div>
+
+    <div class="info-grid">
+      <div class="info-item">
+        <div class="info-label">Bus Name</div>
+        <div class="info-value">{{ booking.bus_name }}</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">Departure</div>
+        <div class="info-value">{{ booking.departure_time }}</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">Seat No.</div>
+        <div class="info-value highlight">{{ booking.seat_number }}</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">Booking ID</div>
+        <div class="info-value">#{{ booking.booking_id }}</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">Booked On</div>
+        <div class="info-value" style="font-size:.85rem;">{{ booking.booking_date }}</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">Distance</div>
+        <div class="info-value">{{ booking.distance }} km</div>
+      </div>
+    </div>
+
+    <div class="passenger-block">
+      <div>
+        <div class="pax-name-label">Passenger Name</div>
+        <div class="pax-name">{{ booking.passenger_name }}</div>
+        <div style="font-size:.83rem;color:#888;margin-top:3px;">{{ booking.email }}</div>
+      </div>
+      <div class="fare-block">
+        <div class="fare-label">Amount Paid</div>
+        <div class="fare-value">₹{{ fare }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ticket-footer">
+    <span>✅ Ticket confirmed · Carry this ticket for boarding</span>
+    <div class="barcode">
+      {% for h in [30,18,28,12,35,22,15,30,20,12,25,18,30,15,20,28] %}
+      <div class="bar" style="height:{{ h }}px;"></div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

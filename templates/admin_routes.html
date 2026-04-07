@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% block title %}Manage Routes — BusWay Pro Admin{% endblock %}
+{% block content %}
+<div class="admin-layout">
+  <aside class="admin-sidebar">
+    <div style="margin-bottom:.5rem;">
+      <div class="sidebar-section-label">Overview</div>
+      <a href="/admin" class="sidebar-link">📊 Dashboard</a>
+    </div>
+    <div>
+      <div class="sidebar-section-label">Manage</div>
+      <a href="/admin/routes" class="sidebar-link active">🗺️ Routes</a>
+      <a href="/admin/bookings" class="sidebar-link">🎟️ All Bookings</a>
+    </div>
+    <div>
+      <div class="sidebar-section-label">Account</div>
+      <a href="/logout" class="sidebar-link">🚪 Logout</a>
+    </div>
+  </aside>
+
+  <main class="admin-content">
+    <div class="page-header">
+      <div>
+        <div class="page-title">Manage Routes</div>
+        <div class="page-subtitle">Add and view bus routes across India</div>
+      </div>
+    </div>
+
+    <!-- Add Route -->
+    <div class="card-pro fade-in" style="margin-bottom:1.5rem;">
+      <div class="section-header">
+        <div class="section-icon">➕</div>
+        <div>
+          <div style="font-family:'Syne',sans-serif;font-weight:700;">Add New Route</div>
+        </div>
+      </div>
+      <form method="POST">
+        <div style="display:grid;grid-template-columns:1fr 1fr 150px auto;gap:12px;align-items:end;">
+          <div class="form-group">
+            <label class="form-label">Source City</label>
+            <input type="text" name="source" class="form-control-pro" placeholder="e.g. Mumbai" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Destination City</label>
+            <input type="text" name="destination" class="form-control-pro" placeholder="e.g. Pune" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Distance (km)</label>
+            <input type="number" name="distance" class="form-control-pro" placeholder="150" min="1" required>
+          </div>
+          <button type="submit" class="btn-pro btn-pro-primary" style="padding:12px 20px;">Add Route</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Routes Table -->
+    <div class="table-container fade-in">
+      <div class="table-header">
+        <h3>🗺️ All Routes</h3>
+        <span class="badge-pro badge-info">{{ routes|length }} routes</span>
+      </div>
+      <table class="table-pro">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Source</th>
+            <th>Destination</th>
+            <th>Distance</th>
+            <th>Est. Fare</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for r in routes %}
+          <tr>
+            <td style="color:var(--text-muted);font-size:.85rem;">#{{ r.route_id }}</td>
+            <td><strong>{{ r.source }}</strong></td>
+            <td><strong>{{ r.destination }}</strong></td>
+            <td>{{ r.distance }} km</td>
+            <td style="color:var(--primary);font-weight:600;">₹{{ [150, (r.distance * 2.5)|int]|max }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>
+{% endblock %}

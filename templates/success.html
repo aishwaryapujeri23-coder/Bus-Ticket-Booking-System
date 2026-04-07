@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block title %}Booking Confirmed — BusWay Pro{% endblock %}
+{% block content %}
+<div class="success-wrapper">
+  <div class="success-card fade-in">
+    <div class="success-icon">✅</div>
+    <h2 style="font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;margin-bottom:.5rem;">Booking Confirmed!</h2>
+    <p style="color:var(--text-muted);margin-bottom:1.5rem;">Your seat is reserved. Check your details below.</p>
+
+    {% if confirm %}
+    <!-- PNR Badge -->
+    <div style="background:rgba(255,107,43,.1);border:1px solid rgba(255,107,43,.3);border-radius:10px;padding:12px 20px;margin-bottom:1.5rem;display:inline-block;">
+      <div style="font-size:.75rem;color:var(--text-muted);font-weight:600;letter-spacing:.5px;text-transform:uppercase;">PNR Number</div>
+      <div style="font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;color:var(--primary);letter-spacing:2px;">{{ confirm.pnr }}</div>
+    </div>
+
+    <div class="ticket-details" style="text-align:left;margin-bottom:1.5rem;">
+      <div class="ticket-row">
+        <span class="ticket-row-label">Passenger</span>
+        <span class="ticket-row-value">{{ confirm.passenger_name }}</span>
+      </div>
+      <div class="ticket-row">
+        <span class="ticket-row-label">Bus</span>
+        <span class="ticket-row-value">{{ confirm.bus_name }}</span>
+      </div>
+      <div class="ticket-row">
+        <span class="ticket-row-label">From → To</span>
+        <span class="ticket-row-value">{{ confirm.source }} → {{ confirm.destination }}</span>
+      </div>
+      <div class="ticket-row">
+        <span class="ticket-row-label">Departure</span>
+        <span class="ticket-row-value">{{ confirm.departure_time }}</span>
+      </div>
+      <div class="ticket-row">
+        <span class="ticket-row-label">Seat Number</span>
+        <span class="ticket-row-value" style="color:var(--primary);">{{ confirm.seat_number }}</span>
+      </div>
+      <div class="ticket-row">
+        <span class="ticket-row-label">Amount Paid</span>
+        <span class="ticket-row-value" style="color:var(--success);">₹{{ confirm.fare }}</span>
+      </div>
+      <div class="ticket-row">
+        <span class="ticket-row-label">Booked On</span>
+        <span class="ticket-row-value">{{ confirm.booking_date }}</span>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+      <a href="/download_ticket/{{ confirm.booking_id }}" target="_blank" class="btn-pro btn-pro-success btn-pro-lg">
+        📄 Download Ticket PDF
+      </a>
+      <a href="/my_bookings" class="btn-pro btn-pro-ghost">🎟️ My Bookings</a>
+    </div>
+
+    {% else %}
+    <a href="/my_bookings" class="btn-pro btn-pro-primary">View My Bookings</a>
+    {% endif %}
+
+    <a href="/" style="display:block;margin-top:1rem;font-size:.85rem;color:var(--text-muted);text-decoration:none;text-align:center;">← Back to Home</a>
+  </div>
+</div>
+{% endblock %}

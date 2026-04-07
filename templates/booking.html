@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+{% block title %}Choose Seat — BusWay Pro{% endblock %}
+{% block content %}
+<div class="page-wrapper">
+  <div class="page-header">
+    <div>
+      <div class="page-title">Choose Your Seat</div>
+      <div class="page-subtitle">🚌 {{ bus.bus_name }} · {{ bus.source }} → {{ bus.destination }}</div>
+    </div>
+    <a href="javascript:history.back()" class="btn-pro btn-pro-ghost">← Back</a>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 340px;gap:1.5rem;align-items:start;">
+
+    <!-- Seat Map -->
+    <div class="card-pro">
+      <div class="section-header">
+        <div class="section-icon">💺</div>
+        <div>
+          <div style="font-family:'Syne',sans-serif;font-weight:700;">Seat Map</div>
+          <div style="font-size:.83rem;color:var(--text-muted);">Click a seat to select it</div>
+        </div>
+      </div>
+
+      <!-- Legend -->
+      <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:1.5rem;">
+        <div style="display:flex;align-items:center;gap:7px;font-size:.83rem;color:var(--text-muted);">
+          <div style="width:24px;height:24px;background:var(--surface-3);border:2px solid var(--border);border-radius:5px;"></div> Available
+        </div>
+        <div style="display:flex;align-items:center;gap:7px;font-size:.83rem;color:var(--text-muted);">
+          <div style="width:24px;height:24px;background:var(--primary);border:2px solid var(--primary);border-radius:5px;"></div> Selected
+        </div>
+        <div style="display:flex;align-items:center;gap:7px;font-size:.83rem;color:var(--text-muted);">
+          <div style="width:24px;height:24px;background:rgba(255,77,109,.08);border:2px solid rgba(255,77,109,.3);border-radius:5px;"></div> Booked
+        </div>
+      </div>
+
+      <!-- Bus Layout -->
+      <div style="background:var(--surface-3);border:1px solid var(--border);border-radius:12px;padding:1.5rem;">
+        <div style="text-align:center;margin-bottom:1.2rem;font-size:.8rem;color:var(--text-muted);border-bottom:1px solid var(--border);padding-bottom:.8rem;">
+          🚗 Driver's Cabin
+        </div>
+        <div id="seatMap" style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;max-width:260px;margin:0 auto;">
+          {% for i in range(1, bus.seats + 1) %}
+          <button type="button"
+            class="seat-btn {% if i|string in booked_seats or i in booked_seats %}booked{% endif %}"
+            data-seat="{{ i }}"
+            onclick="selectSeat(this, {{ i }})"
+            {% if i|string in booked_seats or i in booked_seats %}disabled{% endif %}>
+            {{ i }}
+          </button>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Booking Summary -->
+    <div>
+      <div class="card-pro" style="position:sticky;top:88px;">
+        <h4 style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:1.2rem;">📋 Booking Summary</h4>
+        <div class="ticket-details">
+          <div class="ticket-row">
+            <span class="ticket-row-label">Bus</span>
+            <span class="ticket-row-value">{{ bus.bus_name }}</span>
+          </div>
+          <div class="ticket-row">
+            <span class="ticket-row-label">Route</span>
+            <span class="ticket-row-value">{{ bus.source }} → {{ bus.destination }}</span>
+          </div>
+          <div class="ticket-row">
+            <span class="ticket-row-label">Departure</span>
+            <span class="ticket-row-value">{{ bus.departure_time }}</span>
+          </div>
+          {% if bus.distance %}
+          <div class="ticket-row">
+            <span class="ticket-row-label">Distance</span>
+            <span class="ticket-row-value">{{ bus.distance }} km</span>
+          </div>
+          <div class="ticket-row">
+            <span class="ticket-row-label">Fare</span>
+            <span class="ticket-row-value" style="color:var(--primary);">₹{{ [150, (bus.distance * 2.5)|int]|max }}</span>
+          </div>
+          {% endif %}
+          <div class="ticket-row">
+            <span class="ticket-row-label">Selected Seat</span>
+            <span class="ticket-row-value" id="selectedSeatDisplay" style="color:var(--primary);">— None —</span>
+          </div>
+        </div>
+
+        <form method="POST" id="bookingForm">
+          <input type="hidden" name="seat" id="seatInput" required>
+          <button type="submit" id="bookBtn" class="btn-pro btn-pro-primary btn-pro-full btn-pro-lg" disabled style="opacity:.5;cursor:not-allowed;">
+            Proceed to Payment →
+          </button>
+        </form>
+        <p style="font-size:.8rem;color:var(--text-muted);text-align:center;margin-top:.8rem;">🔒 Secure booking · Instant confirmation</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function selectSeat(el, seatNum) {
+  document.querySelectorAll('.seat-btn.selected').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('seatInput').value = seatNum;
+  document.getElementById('selectedSeatDisplay').textContent = 'Seat ' + seatNum;
+  const btn = document.getElementById('bookBtn');
+  btn.disabled = false;
+  btn.style.opacity = '1';
+  btn.style.cursor = 'pointer';
+}
+</script>
+{% endblock %}

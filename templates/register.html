@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}Register — BusWay Pro{% endblock %}
+{% block content %}
+<div class="auth-wrapper">
+  <div class="auth-card fade-in">
+    <div class="auth-logo">
+      <div class="brand-icon">🚌</div>
+      <span class="brand-name" style="font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:800;">Bus<span style="color:var(--primary);">Way</span> Pro</span>
+    </div>
+    <h2 class="auth-title">Create account</h2>
+    <p class="auth-sub">Join thousands of travellers booking smart</p>
+
+    <form method="POST">
+      <div class="form-group" style="margin-bottom:1rem;">
+        <label class="form-label">Full Name</label>
+        <input type="text" name="name" class="form-control-pro" placeholder="Arjun Sharma" required>
+      </div>
+      <div class="form-group" style="margin-bottom:1rem;">
+        <label class="form-label">Email Address</label>
+        <input type="email" name="email" class="form-control-pro" placeholder="you@example.com" required>
+      </div>
+      <div class="form-group" style="margin-bottom:1.5rem;">
+        <label class="form-label">Password</label>
+        <input type="password" name="password" class="form-control-pro" placeholder="Min. 6 characters" required>
+      </div>
+      <button type="submit" class="btn-pro btn-pro-primary btn-pro-full btn-pro-lg">Create Account →</button>
+    </form>
+
+    <hr class="divider">
+    <p style="text-align:center;color:var(--text-muted);font-size:.9rem;">
+      Already have an account? <a href="/login" style="color:var(--primary);font-weight:600;text-decoration:none;">Sign in</a>
+    </p>
+  </div>
+</div>
+{% endblock %}

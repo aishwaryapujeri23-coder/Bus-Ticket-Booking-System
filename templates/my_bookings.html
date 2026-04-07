@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block title %}My Trips — BusWay Pro{% endblock %}
+{% block content %}
+<div class="page-wrapper">
+  <div class="page-header">
+    <div>
+      <div class="page-title">My Trips</div>
+      <div class="page-subtitle">All your bookings in one place</div>
+    </div>
+    <a href="/" class="btn-pro btn-pro-primary">+ Book New Trip</a>
+  </div>
+
+  {% if bookings %}
+  <div class="table-container fade-in">
+    <div class="table-header">
+      <h3>🎟️ Booking History</h3>
+      <span class="badge-pro badge-orange">{{ bookings|length }} booking{{ 's' if bookings|length != 1 }}</span>
+    </div>
+    <table class="table-pro">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Bus</th>
+          <th>Route</th>
+          <th>Departure</th>
+          <th>Seat</th>
+          <th>Booked On</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for b in bookings %}
+        <tr>
+          <td><span style="color:var(--text-muted);font-size:.85rem;">#{{ b.booking_id }}</span></td>
+          <td><strong>{{ b.bus_name }}</strong></td>
+          <td>
+            <span style="color:var(--text-muted);">{{ b.source }}</span>
+            <span style="color:var(--primary);margin:0 4px;">→</span>
+            <span style="color:var(--text-muted);">{{ b.destination }}</span>
+          </td>
+          <td>{{ b.departure_time }}</td>
+          <td><span class="badge-pro badge-orange">Seat {{ b.seat_number }}</span></td>
+          <td style="font-size:.85rem;color:var(--text-muted);">{{ b.booking_date }}</td>
+          <td>
+            <div style="display:flex;gap:8px;">
+              <a href="/download_ticket/{{ b.booking_id }}" target="_blank" class="btn-pro btn-pro-ghost btn-pro-sm" title="Download ticket">📄</a>
+              <a href="/cancel_booking/{{ b.booking_id }}"
+                 class="btn-pro btn-pro-danger btn-pro-sm"
+                 onclick="return confirm('Cancel this booking?')">Cancel</a>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <div class="empty-state-icon">🎟️</div>
+    <h4>No bookings yet</h4>
+    <p>Start your journey by searching for a bus</p>
+    <a href="/" class="btn-pro btn-pro-primary" style="margin-top:1.2rem;">Book First Trip →</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
