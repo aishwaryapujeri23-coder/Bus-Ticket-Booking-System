@@ -1,9 +1,9 @@
-#### Project Overview
+# Project Overview
 
 - The Bus Transportation Management System is a web-based application designed to automate the process of managing bus transportation services. The system allows users to search buses, book seats, and manage bookings efficiently, while administrators can manage buses, routes, and passenger data through a centralized platform.
 - This project demonstrates the practical implementation of Database Management System (DBMS) concepts in a real-world transportation scenario.
 
-#### Features
+# Features
 👤 User Features
 - User Registration and Login
 - Search buses by source and destination
@@ -18,7 +18,7 @@
 - Monitor passenger details
 - Manage seat availability
   
-🏗️ System Architecture
+# System Architecture
 The system follows a three-tier architecture:
 - Frontend Layer: HTML, CSS
 - Backend Layer: Python Flask
@@ -26,7 +26,7 @@ The system follows a three-tier architecture:
 
 This architecture ensures proper separation of concerns and efficient system performance.
 
-⚙️ Technologies Used
+# Technologies Used
 - Technology	Description
 - HTML	Frontend structure
 - CSS	Styling and design
@@ -34,7 +34,7 @@ This architecture ensures proper separation of concerns and efficient system per
 - MySQL	Database management
 - VS Code	Development environment
   
-📊 Modules
+# Modules
 - User Registration Module
 - User Login Module
 - Bus Search Module
@@ -43,14 +43,14 @@ This architecture ensures proper separation of concerns and efficient system per
 - Admin Dashboard
 - Route Management Module
 
-🗄️ Database Design
+# Database Design
 The system uses a relational database with the following tables:-
 - Users – Stores user details
 - Buses – Stores bus information
 - Routes – Stores route details
 - Bookings – Stores booking records
 
-🔄 System Workflow
+# System Workflow
 - User registers and logs into the system
 - User searches for buses based on route
 - System displays available buses and seats
@@ -58,13 +58,13 @@ The system uses a relational database with the following tables:-
 - Booking details are stored in the database
 - Admin manages buses, routes, and bookings
 
-✅ Advantages
+# Advantages
 - Reduces manual work
 - Improves booking efficiency
 - Maintains organized database
 - Provides fast and easy bus search
 
-🔮 Future Enhancements
+# Future Enhancements
 - Integration of online payment gateway
 - Mobile application development
 - GPS-based real-time bus tracking
