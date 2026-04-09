@@ -44,11 +44,11 @@ This architecture ensures proper separation of concerns and efficient system per
 - Route Management Module
 
 🗄️ Database Design
-The system uses a relational database with the following tables:
-Users – Stores user details
-Buses – Stores bus information
-Routes – Stores route details
-Bookings – Stores booking records
+The system uses a relational database with the following tables:-
+- Users – Stores user details
+- Buses – Stores bus information
+- Routes – Stores route details
+- Bookings – Stores booking records
 
 🔄 System Workflow
 - User registers and logs into the system
